@@ -9,10 +9,8 @@ import org.team1502.injection.RobotFactory;
 import org.team1502.drivers.MecanumDriver;
 
 import frc.robot.Robot;
-import frc.robot.subsystems.AlgaeIntakeSubsystem;
-import frc.robot.subsystems.CoralIntakeSubsystem;
+
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
 
 public class Kitbot {
     public static RobotFactory Create() {
@@ -74,31 +72,6 @@ public class Kitbot {
                         .Constraints(Math.PI, Math.PI))
                 )
             )
-            .Subsystem(ElevatorSubsystem.class, sys->sys
-                .MotorController("Motor", Inventory.Names.Motors.Elevator, c->c
-                    .PDH(2)//Change when connected!!
-                    .CanNumber(6)
-                    .Abbreviation("Elv")))
-            .Subsystem(CoralIntakeSubsystem.class, sys->sys
-                .MotorController("Intake", Inventory.Names.Motors.CoralIntake, c->c
-                    .PDH(4)
-                    .CanNumber(15)
-                    .Abbreviation("CI"))
-                .MotorController("Rotate", Inventory.Names.Motors.CoralRotate, c->c
-                    .PID(1.2,0.0002,0)
-                    .PDH(3)
-                    .CanNumber(16)
-                    .Abbreviation("CR")))
-            .Subsystem(AlgaeIntakeSubsystem.class, sys->sys
-                .MotorController(AlgaeIntakeSubsystem.Wheels, Inventory.Names.Motors.AlgaeWheels, c->c
-                    .PDH(17)
-                    .CanNumber(20)
-                    .Abbreviation("AW"))
-                .MotorController(AlgaeIntakeSubsystem.Rotate, Inventory.Names.Motors.AlgaeRotate, c->c
-                    .PDH(17)
-                    .CanNumber(19)
-                    .Abbreviation("AR")))
-            
         ));
             
             
