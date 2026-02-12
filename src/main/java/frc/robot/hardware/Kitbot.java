@@ -24,7 +24,7 @@ public class Kitbot {
 
     @SuppressWarnings("unchecked")
     public static RobotConfiguration buildRobot() {
-        return RobotConfiguration.Create("KitBot-2029", fn->
+        return RobotConfiguration.Create("1502_KitBot", fn->
         // include these parts
         Inventory.Parts(fn,
             Inventory::Motors, 
