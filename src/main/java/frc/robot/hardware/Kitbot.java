@@ -42,8 +42,8 @@ public class Kitbot {
                 .MecanumDrive(m->m
                     .Chassis(c->c.Rectangular(
                         // Gap + Frame + Gap + Wheel
-                        Inches.of(25),
-                        Inches.of(19.5))
+                        Inches.of(19.5),
+                        Inches.of(16))
                     )
                     .MotorController("Front Left", Inventory.Names.Motors.Mecanum, c->c
                         .PDH(19)

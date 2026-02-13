@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.autos.Auto1;
-import frc.robot.commands.autos.ArmTestAuto;
+
 import frc.robot.commands.autos.Trajectory1Command;
 import frc.robot.commands.autos.Wheel;
 import frc.robot.hardware.Kitbot;

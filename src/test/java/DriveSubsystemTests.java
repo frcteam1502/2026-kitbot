@@ -33,9 +33,7 @@ public class DriveSubsystemTests {
         assert HAL.initialize(500, 0); // initialize the HAL, crash if failed
         m_robotConfiguration = Kitbot.buildRobot();
         // TODO: disable-all except e.g., DriveSubsystem function needed
-        m_robotConfiguration.DisableSubsystem(ElevatorSubsystem.class);
-        m_robotConfiguration.DisableSubsystem(CoralIntakeSubsystem.class);
-        m_robotConfiguration.DisableSubsystem(AlgaeIntakeSubsystem.class);
+        
 
         RobotFactory factory = Kitbot.Create(m_robotConfiguration);
         m_driveSubsystem = factory.getInstance(DriveSubsystem.class);
