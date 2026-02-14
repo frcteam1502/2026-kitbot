@@ -20,11 +20,11 @@ public class ShooterCommands extends Command {
         
 
         Operator.RightBumper
-            .onTrue(new InstantCommand(() -> m_subsystem.setMotorRightSpeed(0.5)))
-            .onFalse(new InstantCommand(() -> m_subsystem.setMotorRightSpeed(0)));
+            .onTrue(new InstantCommand(() -> m_subsystem.setShooterMotorRightSpeed(0.5)))
+            .onFalse(new InstantCommand(() -> m_subsystem.setShooterMotorRightSpeed(0)));
         Operator.LeftBumper
-            .onTrue(new InstantCommand(() -> m_subsystem.setMotorLeftSpeed(0.5)))
-            .onFalse(new InstantCommand(() -> m_subsystem.setMotorLeftSpeed(0)));
+            .onTrue(new InstantCommand(() -> m_subsystem.setShooterMotorLeftSpeed(0.5)))
+            .onFalse(new InstantCommand(() -> m_subsystem.setShooterMotorLeftSpeed(0)));
         Operator.A
             .onTrue(new InstantCommand(() -> m_subsystem.setTurretPos(90)))
             .onFalse(new InstantCommand(() -> m_subsystem.setTurretPos(0)));
