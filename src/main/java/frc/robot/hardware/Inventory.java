@@ -21,7 +21,7 @@ public class Inventory {
             public static String Mecanum = "Mecanum Motor";
             public static String Elevator = "Elevator Motor";
             public static String ShooterMotor = "ShooterMotor";
-            public static String AlgaeWheels = "Algae Wheels Motor";
+            public static String Turret = "Turret";
             public static String AlgaeRotate = "Algae Rotate Motor";
         }
     }
@@ -95,8 +95,15 @@ public class Inventory {
             .Motor(Motor.NEO)
             .IdleMode(IdleMode.kCoast)
             .SmartCurrentLimit(40)
+        )
+        .MotorController(Names.Motors.Turret, Manufacturer.REVRobotics, c->c
+            .Motor(Motor.NEO)
+            .IdleMode(IdleMode.kBrake)
+            .GearBox(g-> g
+                 .Gear("Stage1", 1, 4)
+            )
+            .SmartCurrentLimit(40)
         );
-        
     }
 
     public static PartFactory Mk4iL3(PartFactory inventory) { return inventory
