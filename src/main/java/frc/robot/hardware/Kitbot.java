@@ -64,11 +64,12 @@ public class Kitbot {
                         .CanNumber(14)
                         .Abbreviation("RR"))
                     .MotorController("Shooter Motor Left", Inventory.Names.Motors.ShooterMotor, c->c
-                        .PDH(10)
+                        .PDH(17)
                         .CanNumber(10)
                         .Abbreviation("SML"))
+                        
                     .MotorController("Shooter Motor Right", Inventory.Names.Motors.ShooterMotor, c->c
-                        .PDH(9)
+                        .PDH(3)
                         .CanNumber(9)
                         .Abbreviation("SMR"))
                     // MecanumComtroller Command Information

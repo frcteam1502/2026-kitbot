@@ -31,25 +31,27 @@ public class ShooterSubsystem extends SubsystemBase{
     }
 
     
-
-    public void setMotorLeftSpeed(double speed){
-        m_shooterLeft.set(speed);
+    //Shooter
+    public void setShooterMotorLeftSpeed(double speed){
+        //reversed
+        m_shooterLeft.set(-speed);
     }
-    public void setMotorRightSpeed(double speed){
+    public void setShooterMotorRightSpeed(double speed){
         m_shooterRight.set(speed);
     }
 
+    //Do not run setShooterSpeed until tested that motors run same directions
+    public void setShooterSpeed(double speed){
+        //Shooter Left reversed
+        m_shooterLeft.set(-speed);
+        m_shooterRight.set(speed);
+    }
+
+    //turret
     public void setTurretPos(double pos){
         var pid = m_turret.getClosedLoopController();
         pid.setSetpoint(pos, ControlType.kPosition);
         //If we change this ControlType to .kVelocity we can do velocity control.
-    }
-
-
-    //Do not run setShooterSpeed until tested that motors run same directions
-    public void setShooterSpeed(double speed){
-        m_shooterLeft.set(speed);
-        m_shooterRight.set(speed);
     }
 
 }
