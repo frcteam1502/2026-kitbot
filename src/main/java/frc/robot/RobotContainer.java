@@ -7,12 +7,15 @@ package frc.robot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.autos.Auto1;
-
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.commands.autos.Trajectory1Command;
 import frc.robot.commands.autos.Wheel;
 import frc.robot.hardware.Kitbot;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.team1502.Operator;
+import frc.robot.commands.ShooterCommands;
 
 import org.team1502.configuration.factory.RobotConfiguration;
 import org.team1502.injection.RobotFactory;
@@ -36,7 +39,7 @@ public class RobotContainer {
     public RobotContainer() {
         robotConfiguration = Kitbot.buildRobot();
         robotFactory = RobotFactory.Create(Robot.class, robotConfiguration);
-
+      
       m_chooser.setDefaultOption("Default", "Auto Right");
       m_chooser.addOption("Right Side", "Auto Right");
       m_chooser.addOption("Left Side", "Auto Left");
@@ -45,6 +48,7 @@ public class RobotContainer {
       m_chooser.addOption("Rear Left", "2");
       m_chooser.addOption("Rear Right", "3");
       SmartDashboard.putData("Auto choices", m_chooser);
+     
     }
 
 
@@ -53,9 +57,11 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
+ 
   
     public Command getAutonomousCommand() {          
         Command autonomousCommand;
+        
         String autoSelected = m_chooser.getSelected();
         switch(autoSelected) {
             case "0": return new Wheel(robotConfiguration, 0, 0.2);
