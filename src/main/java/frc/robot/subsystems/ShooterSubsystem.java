@@ -14,26 +14,29 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 @DefaultCommand(command = ShooterCommands.class)
 public class ShooterSubsystem extends SubsystemBase{
-    final SparkMax m_shooterLeft;
+    
     final SparkMax m_shooterRight;
     
     
     public ShooterSubsystem(RobotConfiguration robotConfiguration){
-        m_shooterLeft = robotConfiguration.MotorController("Shooter Motor Left").buildSparkMax();
+        
         m_shooterRight = robotConfiguration.MotorController("Shooter Motor Right").buildSparkMax();
            }
     
 
-
-    public void init(){
-        //Add things if we need it later
+    @Override
+    public void periodic(){
+        
+        SmartDashboard.putNumber("Encoder Velocity", m_shooterRight.getEncoder().getVelocity());
+        SmartDashboard.putNumber("Encoder current", m_shooterRight.getOutputCurrent());
+        SmartDashboard.updateValues();
     }
 
     
     //Shooter
     public void setShooterMotorLeftSpeed(double speed){
         //reversed
-        m_shooterLeft.set(-speed);
+       
     }
     public void setShooterMotorRightSpeed(double speed){
         m_shooterRight.set(speed);
@@ -42,8 +45,15 @@ public class ShooterSubsystem extends SubsystemBase{
     //Do not run setShooterSpeed until tested that motors run same directions
     public void setShooterSpeed(double speed){
         //Shooter Left reversed
-        m_shooterLeft.set(-speed);
+        
         m_shooterRight.set(speed);
+        
+    }
+    public void setShooterVelocity(double velocity){
+        
+        
+        m_shooterRight.getClosedLoopController().setSetpoint(velocity, ControlType.kVelocity);
+        
     }
 
     //turret

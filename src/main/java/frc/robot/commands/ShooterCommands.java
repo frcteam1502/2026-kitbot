@@ -19,10 +19,13 @@ public class ShooterCommands extends Command {
     public void initialize(){
         
 
-        Operator.A
+        /*Operator.A
             .onTrue(new InstantCommand(() -> m_subsystem.setShooterSpeed(0.5)))
-            .onFalse(new InstantCommand(() -> m_subsystem.setShooterSpeed(0)));
-        
+            .onFalse(new InstantCommand(() -> m_subsystem.setShooterSpeed(0)));*/
+        Operator.B
+            .onTrue(new InstantCommand(() -> m_subsystem.setShooterVelocity(170)));
+        Operator.A   
+            .onTrue(new InstantCommand(() -> m_subsystem.setShooterSpeed(0)));
         // TODO: finesse speed
     }
 
@@ -30,7 +33,6 @@ public class ShooterCommands extends Command {
     public void execute(){
         SmartDashboard.putBoolean("operater A", Operator.A.getAsBoolean());
         SmartDashboard.updateValues();
-        
         //We can use this for live stuff
     }
 }

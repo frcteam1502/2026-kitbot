@@ -63,15 +63,26 @@ public class Kitbot {
                         .PDH(0)
                         .CanNumber(14)
                         .Abbreviation("RR"))
-                    .MotorController("Shooter Motor Left", Inventory.Names.Motors.ShooterMotor, c->c
+                    /* .MotorController("Shooter Motor Left", Inventory.Names.Motors.ShooterMotor, c->c
+                        .Reversed()
+                        .PID(0.001,0.00001,0)
                         .PDH(17)
                         .CanNumber(10)
-                        .Abbreviation("SML"))
+                        .Abbreviation("SML"))*/
                         
                     .MotorController("Shooter Motor Right", Inventory.Names.Motors.ShooterMotor, c->c
+                        .Follower(Inventory.Names.Motors.ShooterMotor, f->f
+                            .PDH(17)
+                            .CanNumber(10)
+                            .Abbreviation("SML")
+                        )
+                        .PID(0.001,0.00001,0)
                         .PDH(3)
                         .CanNumber(9)
                         .Abbreviation("SMR"))
+                        
+                        
+                        
                     // MecanumComtroller Command Information
                     .TrajectoryConfig(MetersPerSecond.of(1.0), MetersPerSecondPerSecond.of(3.0))
                     .PIDController(MecanumDriver.XController, p->p.Gain(0.5, 0.0, 0.0))

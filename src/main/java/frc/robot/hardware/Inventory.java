@@ -92,9 +92,13 @@ public class Inventory {
             .SmartCurrentLimit(40)
         )
         .MotorController(Names.Motors.ShooterMotor, Manufacturer.REVRobotics, c->c
+            .GearBox(g -> g
+                .Gear("Stage1", 1, 1)
+            )
             .Motor(Motor.VORTEX)
             .IdleMode(IdleMode.kCoast)
             .SmartCurrentLimit(40)
+            
         )
         .MotorController(Names.Motors.Turret, Manufacturer.REVRobotics, c->c
             .Motor(Motor.NEO)
