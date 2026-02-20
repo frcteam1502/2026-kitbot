@@ -4,6 +4,12 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
+
+import static edu.wpi.first.units.Units.DegreesPerSecond;
+
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
 
 import org.team1502.configuration.annotations.DefaultCommand;
@@ -19,11 +25,16 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.MecanumControllerCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveInstruction;
 import frc.robot.commands.DriverCommands;
+import frc.robot.team1502.GyroIO;
+import frc.robot.team1502.GyroIOInputsAutoLogged;
 
 @SubsystemInfo(disabled = false)
 @DefaultCommand(command = DriverCommands.class)
@@ -36,6 +47,13 @@ public class DriveSubsystem extends SubsystemBase {
 
     final MecanumDriver m_drive;
     final RobotConfiguration m_robotConfiguration;
+
+      static final Lock odometryLock = new ReentrantLock();
+  private final GyroIO gyroIO;
+  private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
+  //private final Module[] modules = new Module[4]; // FL, FR, BL, BR
+  private final SysIdRoutine sysId;
+  private final Alert gyroDisconnectedAlert = new Alert("Disconnected gyro, using kinematics as fallback.", AlertType.kError);
 
     /** Creates a new DriveSubsystem. */
     public DriveSubsystem(RobotConfiguration robotConfiguration) {
