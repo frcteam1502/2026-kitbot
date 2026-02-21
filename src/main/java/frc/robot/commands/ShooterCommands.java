@@ -10,6 +10,7 @@ import frc.robot.team1502.Operator;
 
 public class ShooterCommands extends Command {
     public final ShooterSubsystem m_subsystem;
+    public double velocity = 10;
     public ShooterCommands(ShooterSubsystem subsystem) {
         m_subsystem = subsystem;
         addRequirements(subsystem);
@@ -20,11 +21,11 @@ public class ShooterCommands extends Command {
         
 
         Operator.X
-            .onTrue(new InstantCommand(() -> m_subsystem.setShooterVelocity(50)));
+            .onTrue(new InstantCommand(() -> velocity += 10));
         Operator.Y
-            .onTrue(new InstantCommand(() -> m_subsystem.setShooterVelocity(300)));
+            .onTrue(new InstantCommand(() -> velocity -= 10));
         Operator.B
-            .onTrue(new InstantCommand(() -> m_subsystem.setShooterVelocity(170)));
+            .onTrue(new InstantCommand(() -> m_subsystem.setShooterVelocity(velocity)));
         Operator.A   
             .onTrue(new InstantCommand(() -> m_subsystem.setShooterSpeed(0)));
         // TODO: finesse speed
