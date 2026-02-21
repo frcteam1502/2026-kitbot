@@ -41,7 +41,6 @@ public class Kitbot {
 
                 .MecanumDrive(m->m
                     .Chassis(c->c.Rectangular(
-                        // Gap + Frame + Gap + Wheel
                         Inches.of(19.5),
                         Inches.of(16))
                     )
@@ -63,15 +62,10 @@ public class Kitbot {
                         .PDH(0)
                         .CanNumber(14)
                         .Abbreviation("RR"))
-                    /* .MotorController("Shooter Motor Left", Inventory.Names.Motors.ShooterMotor, c->c
-                        .Reversed()
-                        .PID(0.001,0.00001,0)
-                        .PDH(17)
-                        .CanNumber(10)
-                        .Abbreviation("SML"))*/
                         
                     .MotorController("Shooter Motor Right", Inventory.Names.Motors.ShooterMotor, c->c
                         .Follower(Inventory.Names.Motors.ShooterMotor, f->f
+                            .Reversed()
                             .PDH(17)
                             .CanNumber(10)
                             .Abbreviation("SML")
