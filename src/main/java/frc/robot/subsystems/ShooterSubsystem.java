@@ -6,7 +6,15 @@ import org.team1502.configuration.factory.RobotConfiguration;
 import frc.robot.commands.ShooterCommands;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
+
+import edu.wpi.first.units.Unit;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.VelocityUnit;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.Velocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import java.util.List;
 
 @SubsystemInfo(disabled = false)
 
@@ -14,7 +22,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class ShooterSubsystem extends SubsystemBase{
     
     final SparkMax m_shooterRight;
-    
+    public static final class Pair{
+        Distance m_distance; // feet
+        AngularVelocity m_velocity; //rpm
+        public Pair(double feet, double RevolutionsPerMinute){
+            m_distance = Distance.ofBaseUnits(feet, Units.Feet);
+            m_velocity = AngularVelocity.ofBaseUnits(RevolutionsPerMinute, Units.RPM);
+        }
+    }
+    public static final List<Pair> LOOKUP_TABLE = List.of(
+       new Pair(0, 0)
+       //add more pairs that we have tested for
+    );
     public ShooterSubsystem(RobotConfiguration robotConfiguration){       
         m_shooterRight = robotConfiguration.MotorController("Shooter Motor Right").buildSparkMax();
     }
