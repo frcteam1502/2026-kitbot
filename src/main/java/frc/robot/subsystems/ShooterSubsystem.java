@@ -22,18 +22,41 @@ import java.util.List;
 public class ShooterSubsystem extends SubsystemBase{
     
     final SparkMax m_shooterRight;
-    public static final class Pair{
-        Distance m_distance; // feet
-        AngularVelocity m_velocity; //rpm
-        public Pair(double feet, double RevolutionsPerMinute){
-            m_distance = Distance.ofBaseUnits(feet, Units.Feet);
-            m_velocity = AngularVelocity.ofBaseUnits(RevolutionsPerMinute, Units.RPM);
+    public final class LookupTable{
+
+        public double[] inputs;
+        public double[] outputs;
+
+        public static final class Pair{
+
+            Distance m_distance; // feet
+            AngularVelocity m_velocity; //rpm
+
+            public Pair(double feet, double revolutionsPerMinute){
+                this.m_distance = Distance.ofBaseUnits(feet, Units.Feet);
+                this.m_velocity = AngularVelocity.ofBaseUnits(revolutionsPerMinute, Units.RPM);
+            }
+            
         }
+
+        public static final List<Pair> LOOKUP_TABLE = List.of(
+        new Pair(0, 0)
+        //add more pairs that we have tested for
+        //must be ordered least to greatest
+        );
+
+        public LookupTable(List<Pair> points){
+            //make inputs and outputs to interpolate between
+            for (int i = 0; i < points.size(); i++){
+
+                Distance x = points.get(i).m_distance;
+                AngularVelocity y = points.get(1).m_velocity;
+
+                
+            }
+        }
+
     }
-    public static final List<Pair> LOOKUP_TABLE = List.of(
-       new Pair(0, 0)
-       //add more pairs that we have tested for
-    );
     public ShooterSubsystem(RobotConfiguration robotConfiguration){       
         m_shooterRight = robotConfiguration.MotorController("Shooter Motor Right").buildSparkMax();
     }
