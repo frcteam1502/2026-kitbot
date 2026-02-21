@@ -22,10 +22,11 @@ import java.util.List;
 public class ShooterSubsystem extends SubsystemBase{
     
     final SparkMax m_shooterRight;
-    public final class LookupTable{
 
-        public double[] inputs;
-        public double[] outputs;
+    public final class LookupTable{
+        
+        public Distance[] inputs;
+        public AngularVelocity[] outputs;
 
         public static final class Pair{
 
@@ -40,23 +41,35 @@ public class ShooterSubsystem extends SubsystemBase{
         }
 
         public static final List<Pair> LOOKUP_TABLE = List.of(
-        new Pair(0, 0)
-        //add more pairs that we have tested for
-        //must be ordered least to greatest
+            //dummy points
+
+            new Pair(0, 0),
+            new Pair(1, 1)
+            
+            //must be ordered least to greatest
+            //must have more than 2
+            //must not repeat x values, aka distance
         );
 
         public LookupTable(List<Pair> points){
             //make inputs and outputs to interpolate between
+            
+            //(untested)
+            inputs = new Distance[points.size()];
+            outputs = new AngularVelocity[points.size()];
+
             for (int i = 0; i < points.size(); i++){
 
                 Distance x = points.get(i).m_distance;
                 AngularVelocity y = points.get(1).m_velocity;
 
-                
+                inputs[i] = x;
+                outputs[i] = y;
             }
         }
 
     }
+
     public ShooterSubsystem(RobotConfiguration robotConfiguration){       
         m_shooterRight = robotConfiguration.MotorController("Shooter Motor Right").buildSparkMax();
     }
