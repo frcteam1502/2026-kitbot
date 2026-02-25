@@ -25,17 +25,17 @@ public class ShooterSubsystem extends SubsystemBase{
 
     public final class LookupTable{
         
-        public Distance[] inputs;
-        public AngularVelocity[] outputs;
+        public double[] inputs;
+        public double[] outputs;
 
         public static final class Pair{
 
-            Distance m_distance; // feet
-            AngularVelocity m_velocity; //rpm
+            double m_distance; // feet
+            double m_velocity; //rpm
 
             public Pair(double feet, double revolutionsPerMinute){
-                this.m_distance = Distance.ofBaseUnits(feet, Units.Feet);
-                this.m_velocity = AngularVelocity.ofBaseUnits(revolutionsPerMinute, Units.RPM);
+                this.m_distance = feet;
+                this.m_velocity = revolutionsPerMinute;
             }
             
         }
@@ -49,25 +49,57 @@ public class ShooterSubsystem extends SubsystemBase{
             //must be ordered least to greatest
             //must have more than 2
             //must not repeat x values, aka distance
-        );
-
-        public LookupTable(List<Pair> points){
-            //make inputs and outputs to interpolate between
+            );
+            
+            /**make inputs and outputs to interpolate between */
+        public LookupTable(){
             
             //(untested)
-            inputs = new Distance[points.size()];
-            outputs = new AngularVelocity[points.size()];
+            inputs = new double[LOOKUP_TABLE.size()];
+            outputs = new double[LOOKUP_TABLE.size()];
 
-            for (int i = 0; i < points.size(); i++){
+            for (int i = 0; i < LOOKUP_TABLE.size(); i++){
 
-                Distance x = points.get(i).m_distance;
-                AngularVelocity y = points.get(1).m_velocity;
+                double x = LOOKUP_TABLE.get(i).m_distance;
+                double y = LOOKUP_TABLE.get(i).m_velocity;
 
                 inputs[i] = x;
                 outputs[i] = y;
             }
         }
+        public double interpolate(double distance){
+            
+            double x_greater;
+            double y_greater;
 
+            double x_less;
+            double y_less;
+
+            double m;
+            double b;
+
+            double velocity = 0;
+
+            for(int i = 0; i >= LOOKUP_TABLE.size(); i++){
+                
+                if (inputs[i] > distance && i !=0){
+                    x_greater = inputs[i];
+                    y_greater = outputs[i];
+                    
+                    x_less = inputs[i-1];
+                    y_less = outputs[i-1];
+
+                    m = (y_greater-y_less)/(x_greater-x_less);
+                    velocity = distance * m;
+
+                
+
+                }
+            }
+
+            return velocity;
+            
+        }
     }
 
     public ShooterSubsystem(RobotConfiguration robotConfiguration){       
