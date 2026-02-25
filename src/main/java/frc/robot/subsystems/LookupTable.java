@@ -70,7 +70,7 @@ import java.util.List;
 
             double velocity = 0;
 
-            for(int i = 0; i >= m_points.size(); i++){
+            for(int i = 0; i < m_points.size(); i++){
                 
                 if (inputs[i] > distance && i !=0){
                     x_greater = inputs[i];
