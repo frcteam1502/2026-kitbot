@@ -20,6 +20,7 @@ import edu.wpi.first.math.estimator.MecanumDrivePoseEstimator;
 import edu.wpi.first.math.estimator.MecanumDrivePoseEstimator3d;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.Trajectory;
@@ -75,11 +76,16 @@ public class DriveSubsystem extends SubsystemBase {
         m_gyroYaw = m_gyro.getYaw().asSupplier();
         m_gyroRotation2d = ()->new Rotation2d(m_gyroYaw.get().times(-1.0));
 
-        poseEstimator = new MecanumDrivePoseEstimator(null, null, null, getPose());
+        MecanumDriveWheelPositions wheelPositions = new MecanumDriveWheelPositions();
+        var kinematics = robotConfiguration.MecanumDrive().Chassis().getMecanumDriveKinematics();
+        // TODO: update MecanumDrive to incorporate this poseEstimator
+        poseEstimator = new MecanumDrivePoseEstimator(kinematics,  Rotation2d.kZero, wheelPositions, Pose2d.kZero);
+
         
         zeroHeading(); // whichever way we are pointing is 0 (+X direction)
-
+        
         m_drive = robotConfiguration.MecanumDrive().buildDriver(m_gyroRotation2d);
+
     }
     int cycle = 0;
     DriveInstruction m_instruction;
