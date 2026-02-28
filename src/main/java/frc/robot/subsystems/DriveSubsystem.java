@@ -15,8 +15,13 @@ import org.team1502.drivers.MecanumDriver;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.estimator.MecanumDrivePoseEstimator;
+import edu.wpi.first.math.estimator.MecanumDrivePoseEstimator3d;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
@@ -55,6 +60,7 @@ public class DriveSubsystem extends SubsystemBase {
     public static final Lock odometryLock = new ReentrantLock();
     private final GyroIO gyroIO;
     private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
+    private final MecanumDrivePoseEstimator poseEstimator;
     //private final Module[] modules = new Module[4]; // FL, FR, BL, BR
     //private final SysIdRoutine sysId;
     private final Alert gyroDisconnectedAlert = new Alert("Disconnected gyro, using kinematics as fallback.", AlertType.kError);
@@ -68,6 +74,8 @@ public class DriveSubsystem extends SubsystemBase {
         gyroIO = new GyroIOPigeon2(m_gyro);
         m_gyroYaw = m_gyro.getYaw().asSupplier();
         m_gyroRotation2d = ()->new Rotation2d(m_gyroYaw.get().times(-1.0));
+
+        poseEstimator = new MecanumDrivePoseEstimator(null, null, null, getPose());
         
         zeroHeading(); // whichever way we are pointing is 0 (+X direction)
 
@@ -186,4 +194,10 @@ public class DriveSubsystem extends SubsystemBase {
         m_instruction = new DriveInstruction(0,0,0, false, 0);
         drive(0,0,0,false);
     }
+
+      /** Adds a new timestamped vision measurement. */
+    public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds, Matrix<N3, N1> visionMeasurementStdDevs) {
+        poseEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
+  }
+
 }
