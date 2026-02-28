@@ -4,10 +4,6 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.hardware.Pigeon2;
-
-import static edu.wpi.first.units.Units.DegreesPerSecond;
-
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
@@ -30,15 +26,23 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.MecanumControllerCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveInstruction;
 import frc.robot.commands.DriverCommands;
 import frc.robot.team1502.GyroIO;
 import frc.robot.team1502.GyroIOInputsAutoLogged;
+import frc.robot.team1502.GyroIOPigeon2;
 
 @SubsystemInfo(disabled = false)
 @DefaultCommand(command = DriverCommands.class)
 public class DriveSubsystem extends SubsystemBase {
+    
+    public static class DriveConstants {
+      public static final double odometryFrequency = 100.0; // Hz
+    
+    }
+    
+
+
     final Pigeon2 m_gyro;
     /** generic Angle in degrees CW */
     public /* final */ Supplier<Angle> m_gyroYaw;
@@ -48,12 +52,12 @@ public class DriveSubsystem extends SubsystemBase {
     final MecanumDriver m_drive;
     final RobotConfiguration m_robotConfiguration;
 
-      static final Lock odometryLock = new ReentrantLock();
-  private final GyroIO gyroIO;
-  private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
-  //private final Module[] modules = new Module[4]; // FL, FR, BL, BR
-  private final SysIdRoutine sysId;
-  private final Alert gyroDisconnectedAlert = new Alert("Disconnected gyro, using kinematics as fallback.", AlertType.kError);
+    public static final Lock odometryLock = new ReentrantLock();
+    private final GyroIO gyroIO;
+    private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
+    //private final Module[] modules = new Module[4]; // FL, FR, BL, BR
+    //private final SysIdRoutine sysId;
+    private final Alert gyroDisconnectedAlert = new Alert("Disconnected gyro, using kinematics as fallback.", AlertType.kError);
 
     /** Creates a new DriveSubsystem. */
     public DriveSubsystem(RobotConfiguration robotConfiguration) {
@@ -61,6 +65,7 @@ public class DriveSubsystem extends SubsystemBase {
         
         // set up gyro and angle suppliers
         m_gyro = robotConfiguration.Pigeon2().buildPigeon2();
+        gyroIO = new GyroIOPigeon2(m_gyro);
         m_gyroYaw = m_gyro.getYaw().asSupplier();
         m_gyroRotation2d = ()->new Rotation2d(m_gyroYaw.get().times(-1.0));
         
