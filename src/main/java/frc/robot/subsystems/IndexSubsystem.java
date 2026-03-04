@@ -18,8 +18,9 @@ import edu.wpi.first.wpilibj2.command.MecanumControllerCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.DriveInstruction;
 
-public class IndexSubsystem {
-    public ShooterSubsystem(RobotConfiguration robotConfiguration){       
+public class IndexSubsystem extends SubsystemBase {
+    final Sparkmax m_feederMotor;
+    public IndexSubsystem(RobotConfiguration robotConfiguration){       
         m_feederMotor = robotConfiguration.MotorController("Feeder Motor").buildSparkMax();
     }
 
