@@ -62,13 +62,13 @@ public class Kitbot {
                         .Abbreviation("RR"))
                     .MotorController("Feeder Motor", Inventory.Names.Motors.FeederMotor, c->c
                         .Reversed()
-                        .PDH(0)
-                        .CanNumber(14)
+                        .PDH(4)
+                        .CanNumber(15)
                         .Abbreviation("FM"))
                     .MotorController("Turret Motor", Inventory.Names.Motors.Turret, c->c
                         .PID(0.001,0,0)
-                        .PDH(67)
-                        .CanNumber(12)
+                        .PDH(5)
+                        .CanNumber(16)
                         .Abbreviation("TR")
                         
                     )    
