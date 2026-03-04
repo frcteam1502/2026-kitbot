@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -19,7 +18,9 @@ public class ShooterCommands extends Command {
     @Override
     public void initialize(){
         
-
+        Driver.A
+            .onTrue(new InstantCommand(() -> m_subsystem.setTurretAngle(90)))
+            .onFalse(new InstantCommand(() -> m_subsystem.setTurretAngle(0)));
         Operator.X
             .onTrue(new InstantCommand(() -> velocity += 10));
         Operator.Y
@@ -33,7 +34,7 @@ public class ShooterCommands extends Command {
 
     @Override
     public void execute(){
-        SmartDashboard.putBoolean("operater A", Operator.A.getAsBoolean());
+        
         //We can use this for live stuff
     }
 }

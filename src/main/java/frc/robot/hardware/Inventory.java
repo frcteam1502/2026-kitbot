@@ -1,7 +1,5 @@
 package frc.robot.hardware;
 
-import static edu.wpi.first.units.Units.Inches;
-
 import java.util.Arrays;
 import java.util.function.Consumer;
 
@@ -15,13 +13,15 @@ import org.team1502.configuration.factory.RobotConfiguration;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import static edu.wpi.first.units.Units.Inches;
+
 public class Inventory {
     public static class Names {
         public static class Motors {
             public static String Mecanum = "Mecanum Motor";
             public static String Elevator = "Elevator Motor";
             public static String ShooterMotor = "ShooterMotor";
-            public static String Turret = "Turret";
+            public static String Turret = "Turret Motor";
             public static String AlgaeRotate = "Algae Rotate Motor";
         }
     }

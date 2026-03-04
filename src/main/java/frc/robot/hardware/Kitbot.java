@@ -1,15 +1,13 @@
 package frc.robot.hardware;
 
+import org.team1502.configuration.factory.RobotConfiguration;
+import org.team1502.drivers.MecanumDriver;
+import org.team1502.injection.RobotFactory;
+
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
-
-import org.team1502.configuration.factory.RobotConfiguration;
-import org.team1502.injection.RobotFactory;
-import org.team1502.drivers.MecanumDriver;
-
 import frc.robot.Robot;
-
 import frc.robot.subsystems.DriveSubsystem;
 
 public class Kitbot {
@@ -62,7 +60,13 @@ public class Kitbot {
                         .PDH(0)
                         .CanNumber(14)
                         .Abbreviation("RR"))
+                    .MotorController("Turret Motor", Inventory.Names.Motors.Turret, c->c
+                        .PID(0.001,0,0)
+                        .PDH(67)
+                        .CanNumber(12)
+                        .Abbreviation("TR")
                         
+                    )    
                     .MotorController("Shooter Motor Right", Inventory.Names.Motors.ShooterMotor, c->c
                         .Follower(Inventory.Names.Motors.ShooterMotor, f->f
                             .Reversed()
