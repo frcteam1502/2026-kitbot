@@ -22,7 +22,7 @@ public class Inventory {
             public static String Elevator = "Elevator Motor";
             public static String ShooterMotor = "ShooterMotor";
             public static String Turret = "Turret";
-            public static String AlgaeRotate = "Algae Rotate Motor";
+            public static String FeederMotor = "FeederMotor";
         }
     }
     public static RobotConfiguration Parts(RobotConfiguration config, Consumer<PartFactory>... factories) {
@@ -103,6 +103,14 @@ public class Inventory {
         .MotorController(Names.Motors.Turret, Manufacturer.REVRobotics, c->c
             .Motor(Motor.NEO)
             .IdleMode(IdleMode.kBrake)
+            .GearBox(g-> g
+                 .Gear("Stage1", 1, 4)
+            )
+            .SmartCurrentLimit(40)
+        )
+        .MotorController(Names.Motors.FeederMotor, Manufacturer.REVRobotics, c->c
+            .Motor(Motor.NEO)
+            .IdleMode(IdleMode.kCoast)
             .GearBox(g-> g
                  .Gear("Stage1", 1, 4)
             )
