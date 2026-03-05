@@ -107,10 +107,12 @@ public class Inventory {
             .IdleMode(IdleMode.kBrake)
             .GearBox(g-> g
                  .Gear("Stage1", 1, 4)
+                 .Gear("stage2",20, 200 )
             )
             .SmartCurrentLimit(40)
         )
         .MotorController(Names.Motors.FeederMotor, Manufacturer.REVRobotics, c->c
+            .Reversed(true)
             .Motor(Motor.NEO)
             .IdleMode(IdleMode.kCoast)
             .GearBox(g-> g

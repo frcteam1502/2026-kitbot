@@ -40,7 +40,8 @@ public class ShooterSubsystem extends SubsystemBase{
         m_shooterRight.getClosedLoopController().setSetpoint(velocity, ControlType.kVelocity);        
     }
     public void setTurretAngle(double pos){
-        m_turret.getClosedLoopController().setSetpoint(pos, ControlType.kPosition);
+        m_turret.getClosedLoopController().setSetpoint(pos*3, ControlType.kPosition);
+        // dividing by 3 is the same as 1 full rotation
     }
 
 

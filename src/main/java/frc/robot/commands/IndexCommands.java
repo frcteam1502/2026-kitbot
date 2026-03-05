@@ -18,7 +18,10 @@ public class IndexCommands extends Command {
         Driver.B   
             .onTrue(new InstantCommand(() -> m_subsystem.setFeederPower(0.4)))
             .onFalse(new InstantCommand(() -> m_subsystem.setFeederPower(0)));
-    }
+        Driver.Y
+            .onTrue(new InstantCommand(() -> m_subsystem.setFeederPower(-0.6)))
+            .onFalse(new InstantCommand(() -> m_subsystem.setFeederPower(0)));
+        }
 
     @Override
     public void execute(){

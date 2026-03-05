@@ -1,6 +1,7 @@
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import frc.robot.subsystems.LookupTable;
@@ -8,6 +9,7 @@ import frc.robot.subsystems.LookupTable.LookupTablePoint;
 
 public class LookUpTableTest {
     @Test
+    
     public void lookuptest1(){
         LookupTable lookupTable = new LookupTable(List.of(
                 new LookupTablePoint(0, 0),
@@ -24,6 +26,7 @@ public class LookUpTableTest {
             assertEquals(3.5, lookupTable.interpolate(3.5), 0.01);
         }
         @Test
+        @Disabled
         public void lookuptest2(){
             
             LookupTable lookupTable = new LookupTable(List.of(

@@ -19,7 +19,7 @@ public class ShooterCommands extends Command {
     public void initialize(){
         
         Driver.A
-            .onTrue(new InstantCommand(() -> m_subsystem.setTurretAngle(90)))
+            .onTrue(new InstantCommand(() -> m_subsystem.setTurretAngle(0.25)))
             .onFalse(new InstantCommand(() -> m_subsystem.setTurretAngle(0)));
         Operator.X
             .onTrue(new InstantCommand(() -> velocity += 10));
