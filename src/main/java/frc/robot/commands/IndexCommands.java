@@ -14,6 +14,7 @@ public class IndexCommands extends Command {
     }
 
     @Override
+    
     public void initialize(){
         Driver.B   
             .onTrue(new InstantCommand(() -> m_subsystem.setFeederPower(0.4)))

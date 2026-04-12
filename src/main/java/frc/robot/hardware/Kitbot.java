@@ -49,26 +49,26 @@ public class Kitbot {
                     .MotorController("Front Right", Inventory.Names.Motors.Mecanum, c->c
                         .Reversed()
                         .PDH(1)
-                        .CanNumber(5)
+                        .CanNumber(4)
                         .Abbreviation("FR"))
                     .MotorController("Rear Left", Inventory.Names.Motors.Mecanum, c->c
                         .PDH(19)
-                        .CanNumber(4)
+                        .CanNumber(14)
                         .Abbreviation("RL"))
                     .MotorController("Rear Right", Inventory.Names.Motors.Mecanum, c->c
                         .Reversed()
                         .PDH(0)
-                        .CanNumber(14)
+                        .CanNumber(16)
                         .Abbreviation("RR"))
                     .MotorController("Feeder Motor", Inventory.Names.Motors.FeederMotor, c->c
                         
                         .PDH(4)
-                        .CanNumber(15)
+                        .CanNumber(2)
                         .Abbreviation("FM"))
                     .MotorController("Turret Motor", Inventory.Names.Motors.Turret, c->c
                         .PID(0.13,0.00005,0)
                         .PDH(5)
-                        .CanNumber(16)
+                        .CanNumber(5)
                         .Abbreviation("TR")
                         
                     )    

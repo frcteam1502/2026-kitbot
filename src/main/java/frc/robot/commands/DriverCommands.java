@@ -13,6 +13,7 @@ public class DriverCommands extends Command {
     final SlewRateLimiter xjerkLimiter = new SlewRateLimiter(3);
     final SlewRateLimiter yjerkLimiter = new SlewRateLimiter(3);
     final SlewRateLimiter turnLimiter = new SlewRateLimiter(8);
+    public boolean fieldrelative = true;
 
     public DriverCommands(DriveSubsystem subsystem) {
         m_subsystem = subsystem;
@@ -24,7 +25,8 @@ public class DriverCommands extends Command {
         //m_subsystem.zeroHeading(); NO!
         m_subsystem.resetEncoders();
         m_subsystem.resetOdometry(new Pose2d());
-
+        Driver.North
+            .onTrue(new InstantCommand(() -> m_subsystem.toggleFieldRelative()));
         Driver.RightBumper
             .onTrue(new InstantCommand(() -> m_subsystem.setMaxOutput(0.5)))
             .onFalse(new InstantCommand(() -> m_subsystem.setMaxOutput(1)));
@@ -46,6 +48,6 @@ public class DriverCommands extends Command {
         leftSpeed = yjerkLimiter.calculate(leftSpeed);
         cwSpeed = turnLimiter.calculate(cwSpeed);
 
-        m_subsystem.drive(forwardSpeed, leftSpeed, cwSpeed, true);
+        m_subsystem.drive(forwardSpeed, leftSpeed, cwSpeed, fieldrelative);
     }
 }

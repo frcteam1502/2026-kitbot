@@ -1,20 +1,19 @@
 
 
-import com.revrobotics.spark.*;
-import edu.wpi.first.hal.HAL;
-import edu.wpi.first.units.measure.Angle;
-
-import static edu.wpi.first.units.Units.Degrees;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.team1502.configuration.factory.RobotConfiguration;
 import org.team1502.injection.RobotFactory;
 
+import com.revrobotics.spark.SparkMax;
+
+import edu.wpi.first.hal.HAL;
+import static edu.wpi.first.units.Units.Degrees;
+import edu.wpi.first.units.measure.Angle;
 import frc.robot.hardware.Kitbot;
-import frc.robot.subsystems.*;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class DriveSubsystemTests {
@@ -61,7 +60,8 @@ public class DriveSubsystemTests {
         System.out.println();
     }
 
-    @Test //Factory is looking in the wrong frc\robot\subsystems and only finding this class, no subsystems
+    @Test
+    @Disabled //Factory is looking in the wrong frc\robot\subsystems and only finding this class, no subsystems
     public void DriveTest1() {
         m_driveSubsystem.drive(0.75, 0.0, 0.25, false);
         dumpModules("Robot-Rotate Clockwise");
