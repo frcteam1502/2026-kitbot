@@ -1,20 +1,18 @@
 
 
-import com.revrobotics.spark.*;
-import edu.wpi.first.hal.HAL;
-import edu.wpi.first.units.measure.Angle;
-
-import static edu.wpi.first.units.Units.Degrees;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.team1502.configuration.factory.RobotConfiguration;
 import org.team1502.injection.RobotFactory;
 
+import com.revrobotics.spark.SparkMax;
+
+import edu.wpi.first.hal.HAL;
+import static edu.wpi.first.units.Units.Degrees;
+import edu.wpi.first.units.measure.Angle;
 import frc.robot.hardware.Kitbot;
-import frc.robot.subsystems.*;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class DriveSubsystemTests {
@@ -31,7 +29,7 @@ public class DriveSubsystemTests {
     @BeforeEach // this method will run before each test
     void setup() {
         assert HAL.initialize(500, 0); // initialize the HAL, crash if failed
-        m_robotConfiguration = Kitbot.buildRobot();
+        m_robotConfiguration = Kitbot.testRobot();
         // TODO: disable-all except e.g., DriveSubsystem function needed
         
 

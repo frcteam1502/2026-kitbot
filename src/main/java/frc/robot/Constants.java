@@ -51,8 +51,7 @@ public final class Constants {
     // These characterization values MUST be determined either experimentally or theoretically
     // for *your* robot's drive.
     // The SysId tool provides a convenient method for obtaining these values for your robot.
-    public static final SimpleMotorFeedforward kFeedforward =
-        new SimpleMotorFeedforward(1, 0.8, 0.15);
+    public static final SimpleMotorFeedforward kFeedforward = new SimpleMotorFeedforward(1, 0.8, 0.15);
 
     // Example value only - as above, this must be tuned for your drive!
     public static final double kPFrontLeftVel = 0.5;

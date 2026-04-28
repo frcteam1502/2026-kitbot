@@ -20,6 +20,7 @@ import java.util.List;
             
         }
 
+
         public static final List<LookupTablePoint> LOOKUP_TABLE = List.of(
             //dummy points
 
@@ -36,7 +37,36 @@ import java.util.List;
             //must have more than 2
             //must not repeat x values, aka distance
             );
+         
+            public static LookupTablePoint Lookup(double distance){
             
+            LookupTablePoint x_greater;
+
+            LookupTablePoint x_less;
+            LookupTablePoint interpolated = LOOKUP_TABLE.get(0);
+
+            double m;
+
+            double velocity = 0;
+
+            for(int i = 0; i < LOOKUP_TABLE.size(); i++){
+                
+                if (LOOKUP_TABLE.get(i).m_distance > distance && i !=0){
+                    x_greater = LOOKUP_TABLE.get(i);
+                    
+                    x_less = LOOKUP_TABLE.get(i-1);
+
+
+                    interpolated.m_velocity = distance * (x_greater.m_velocity-x_less.m_velocity)/(x_greater.m_distance-x_less.m_distance);
+                    //interpolated.m_hoodAngle = distance * (x_greater.m_velocity-x_less.m_velocity)/(x_greater.m_distance-x_less.m_distance);
+                }
+            }
+
+            return interpolated;
+
+        }
+    
+
             /**make inputs and outputs to interpolate between */
         public LookupTable(List<LookupTablePoint> points){
             

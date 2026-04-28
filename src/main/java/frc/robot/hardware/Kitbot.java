@@ -1,16 +1,16 @@
 package frc.robot.hardware;
 
+import org.team1502.configuration.factory.RobotConfiguration;
+import org.team1502.drivers.MecanumDriver;
+import org.team1502.injection.RobotFactory;
+
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
-
-import org.team1502.configuration.factory.RobotConfiguration;
-import org.team1502.injection.RobotFactory;
-import org.team1502.drivers.MecanumDriver;
-
+import static edu.wpi.first.units.Units.Volts;
 import frc.robot.Robot;
-
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.team1502.SimpleMotorFeedforwardBuilder;
 
 public class Kitbot {
     public static RobotFactory Create() {
@@ -19,17 +19,24 @@ public class Kitbot {
     public static RobotFactory Create(RobotConfiguration config) {
         return RobotFactory.Create(Robot.class, config);
     }
-
+    public static RobotConfiguration testRobot() {
+        return RobotConfiguration.Test("1502_KitBot", cfg -> build(cfg));
+    }
     @SuppressWarnings("unchecked")
     public static RobotConfiguration buildRobot() {
-        return RobotConfiguration.Create("1502_KitBot", fn->
-        // include these parts
-        Inventory.Parts(fn,
-            Inventory::Motors, 
-             Inventory::Sensors,
-             Inventory::Kitbot
-            )
+        return RobotConfiguration.Create("1502_KitBot", cfg -> build(cfg));
+    }
 
+    public static RobotConfiguration build(RobotConfiguration configuration)
+    {
+        // include these parts
+        return Inventory.Parts(configuration,
+            Inventory::Motors, 
+            Inventory::Sensors,
+            Inventory::Kitbot
+        )
+        
+       // return configuration
         // build the robot from parts
         .Build(builder->builder
             // We need to invert one side of the drivetrain so that positive voltages
@@ -85,16 +92,15 @@ public class Kitbot {
                         .Gain(0.5, 0.0, 0.0)
                         .Constraints(Math.PI, Math.PI))
                 )
+                .Part("FF", b->SimpleMotorFeedforwardBuilder.Wrap(b)
+                    .kS(Volts.of(1.0))
+                    .kV(0.8)
+                    .kA(0.15)
+                )
             )
-        ));
+        );
             
             
-            // 14 stage 1
-            //  3 intake arm
-            // 16 algae intake wheels
-            // 15 algae intake lift
-
-        
     }
 
 }

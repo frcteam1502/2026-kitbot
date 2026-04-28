@@ -17,7 +17,6 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.estimator.MecanumDrivePoseEstimator;
-import edu.wpi.first.math.estimator.MecanumDrivePoseEstimator3d;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
@@ -35,7 +34,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.DriveInstruction;
 import frc.robot.commands.DriverCommands;
 import frc.robot.team1502.GyroIO;
-import frc.robot.team1502.GyroIOInputsAutoLogged;
 import frc.robot.team1502.GyroIOPigeon2;
 
 @SubsystemInfo(disabled = false)
@@ -60,7 +58,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     public static final Lock odometryLock = new ReentrantLock();
     private final GyroIO gyroIO;
-    private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
+    //private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
     private final MecanumDrivePoseEstimator poseEstimator;
     //private final Module[] modules = new Module[4]; // FL, FR, BL, BR
     //private final SysIdRoutine sysId;
@@ -144,7 +142,7 @@ public class DriveSubsystem extends SubsystemBase {
             instruction.y_speed(),
             instruction.t_rotation(),
             instruction.field()
-             );
+        );
     }
     public TrajectoryConfig getTrajectoryConfig() {
         return m_drive.getTrajectoryConfig();  
