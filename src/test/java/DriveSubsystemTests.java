@@ -30,9 +30,6 @@ public class DriveSubsystemTests {
     void setup() {
         assert HAL.initialize(500, 0); // initialize the HAL, crash if failed
         m_robotConfiguration = Kitbot.testRobot();
-        // TODO: disable-all except e.g., DriveSubsystem function needed
-        
-
         RobotFactory factory = Kitbot.Create(m_robotConfiguration);
         m_driveSubsystem = factory.getInstance(DriveSubsystem.class);
         m_driveSubsystem.m_gyroYaw = ()->getAngle();
@@ -40,7 +37,6 @@ public class DriveSubsystemTests {
             .stream()
             .map(mcb->(SparkMax)mcb.CANSparkMax())
             .toArray(SparkMax[]::new);
-
     }
     
     @SuppressWarnings("PMD.SignatureDeclareThrowsException")
@@ -61,6 +57,7 @@ public class DriveSubsystemTests {
 
     @Test //Factory is looking in the wrong frc\robot\subsystems and only finding this class, no subsystems
     public void DriveTest1() {
+        m_driveSubsystem.drive_type = true; // FieldRelative
         m_driveSubsystem.drive(0.75, 0.0, 0.25, false);
         dumpModules("Robot-Rotate Clockwise");
         assertEquals(1.0, m_modules[0].get(), 0.01); // left-side is faster
