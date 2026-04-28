@@ -52,7 +52,7 @@ public class DriveSubsystem extends SubsystemBase {
     public /* final */ Supplier<Angle> m_gyroYaw;
     /** generic Rotation2d in radians */
     public /* final */ Supplier<Rotation2d> m_gyroRotation2d;
-
+    public boolean drive_type = false; 
     final MecanumDriver m_drive;
     final RobotConfiguration m_robotConfiguration;
 
@@ -121,20 +121,23 @@ public class DriveSubsystem extends SubsystemBase {
         resetOdometry(new Pose2d());
         resetEncoders();
     }
-
+    public void toggleFieldRelative(){
+        drive_type = !drive_type;
+    }
     /**
      * Drives the robot at given x, y and theta speeds. Speeds range from [-1, 1]
      * and the linear speeds have no effect on the angular speed.
      *
      * @param xSpeed        Speed of the robot in the x direction (forward/backwards).
      * @param ySpeed        Speed of the robot in the y direction (sideways).
-     * @param rot           Angular rate of the robot (theta). Clockwise!
-     * @param fieldRelative Whether the provided x and y speeds are relative to the field.
+     * @param rot
+     * @param fieldRelative           Angular rate of the robot (theta). Clockwise!
+     * Whether the provided x and y speeds are relative to the field.
      */
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-        m_drive.drive(xSpeed, ySpeed, rot, fieldRelative);
+        m_drive.drive(xSpeed, ySpeed, rot, drive_type);
     }
-
+    
     public void drive(DriveInstruction instruction) {
         m_instruction = instruction;
         drive(
