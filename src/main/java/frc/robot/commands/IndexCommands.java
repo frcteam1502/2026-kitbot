@@ -17,10 +17,14 @@ public class IndexCommands extends Command {
     
     public void initialize(){
         Driver.B   
-            .onTrue(new InstantCommand(() -> m_subsystem.setFeederPower(0.4)))
+            .onTrue(new InstantCommand(() -> m_subsystem.setFeederPower(-0.4)))
+            .onTrue(new InstantCommand(() -> m_subsystem.setIndexPower(1)))
+            .onFalse(new InstantCommand(() -> m_subsystem.setFeederPower(0)))
             .onFalse(new InstantCommand(() -> m_subsystem.setFeederPower(0)));
         Driver.Y
-            .onTrue(new InstantCommand(() -> m_subsystem.setFeederPower(-0.6)))
+            .onTrue(new InstantCommand(() -> m_subsystem.setFeederPower(0.6)))
+            .onTrue(new InstantCommand(() -> m_subsystem.setIndexPower(-1)))
+            .onFalse(new InstantCommand(() -> m_subsystem.setIndexPower(0)))
             .onFalse(new InstantCommand(() -> m_subsystem.setFeederPower(0)));
         }
 

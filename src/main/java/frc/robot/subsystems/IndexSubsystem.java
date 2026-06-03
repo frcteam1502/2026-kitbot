@@ -12,12 +12,18 @@ import frc.robot.commands.IndexCommands;
 @DefaultCommand(command = IndexCommands.class)
 public class IndexSubsystem extends SubsystemBase {
     final SparkMax m_feederMotor;
+    final SparkMax m_indexMotor;
     public IndexSubsystem(RobotConfiguration robotConfiguration){       
         m_feederMotor = robotConfiguration.MotorController("Feeder Motor").buildSparkMax();
+        m_indexMotor = robotConfiguration.MotorController("Index Motor").buildSparkMax();
     }
 
     public void setFeederPower(double power){
         m_feederMotor.set(power);
         //add the grumble mecanum wheels if neccasary 
     }
+    public void setIndexPower(double power){
+        m_indexMotor.set(power);
+    }
+    
 }

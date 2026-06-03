@@ -21,8 +21,9 @@ public class Inventory {
             public static String Mecanum = "Mecanum Motor";
             public static String Elevator = "Elevator Motor";
             public static String ShooterMotor = "ShooterMotor";
+            public static String IndexMotor = "Index Motor";
             
-            public static String FeederMotor = "FeederMotor";
+            public static String FeederMotor = "Feeder Motor";
             public static String Turret = "Turret Motor";
             public static String AlgaeRotate = "Algae Rotate Motor";
         }
@@ -80,6 +81,16 @@ public class Inventory {
                  .Gear("Stage1", 14, 50)
                  .Gear("Stage2", 14, 50) // 12.75:1, 44.11 ft-lbs, 445.18 rpm, 15.54 ft/s
                  .Wheel(Inches.of(8.0))
+            )
+            .SmartCurrentLimit(40)
+        )
+        .MotorController(Names.Motors.IndexMotor, Manufacturer.REVRobotics, c->c
+            .Motor(Motor.NEO)
+            .IdleMode(IdleMode.kBrake)
+            .GearBox(g-> g
+                 .Gear("Stage1", 1, 4) 
+                    
+                
             )
             .SmartCurrentLimit(40)
         )

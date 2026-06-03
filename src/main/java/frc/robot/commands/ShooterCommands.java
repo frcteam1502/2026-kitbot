@@ -26,7 +26,7 @@ public class ShooterCommands extends Command {
         
             
         Operator.A   
-            .onTrue(new InstantCommand(() -> m_subsystem.setShooterSpeed(10)));
+            .onTrue(new InstantCommand(() -> velocity = 10));
         // TODO: finesse speed
     }
 
