@@ -61,7 +61,6 @@ public class Kitbot {
                         .CanNumber(16)
                         .Abbreviation("RR"))
                     .MotorController("Feeder Motor", Inventory.Names.Motors.FeederMotor, c->c
-                        
                         .PDH(4)
                         .CanNumber(2)
                         .Abbreviation("FM"))
@@ -69,7 +68,20 @@ public class Kitbot {
                         
                         .PDH(19)
                         .CanNumber(19)
-                        .Abbreviation("IM")
+                        .Abbreviation("IXM")
+                    )
+                    .MotorController("Intake Motor", Inventory.Names.Motors.IntakeMotor, c->c
+                        
+                        .PDH(7)
+                        .CanNumber(19)
+                       .Abbreviation("IM")
+                    )
+                    
+                    .MotorController("Intake Motor Rotator", Inventory.Names.Motors.IntakeMotorRotator, c->c
+                        
+                        .PDH(14)
+                        .CanNumber(19)
+                       .Abbreviation("ARM")
                     )
                     .MotorController("Turret Motor", Inventory.Names.Motors.Turret, c->c
                         .PID(0.13,0.00005,0)

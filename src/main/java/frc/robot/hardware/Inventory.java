@@ -19,10 +19,10 @@ public class Inventory {
     public static class Names {
         public static class Motors {
             public static String Mecanum = "Mecanum Motor";
-            public static String Elevator = "Elevator Motor";
+            public static String IntakeMotorRotator = "Intake Motor Rotator";
+            public static String IntakeMotor = "Intake Motor";
             public static String ShooterMotor = "ShooterMotor";
             public static String IndexMotor = "Index Motor";
-            
             public static String FeederMotor = "Feeder Motor";
             public static String Turret = "Turret Motor";
             public static String AlgaeRotate = "Algae Rotate Motor";
@@ -94,13 +94,21 @@ public class Inventory {
             )
             .SmartCurrentLimit(40)
         )
-        .MotorController(Names.Motors.Elevator, Manufacturer.REVRobotics, c->c
-            .Motor(Motor.VORTEX)
-            .IdleMode(IdleMode.kBrake)
+        .MotorController(Names.Motors.IntakeMotor, Manufacturer.REVRobotics, c->c
+            .Motor(Motor.NEO)
+            .IdleMode(IdleMode.kCoast)
             .GearBox(g-> g
                  .Gear("Stage1", 1, 5) 
-                 .Gear("Stage2", 1, 5) 
-                 .Wheel(Inches.of(1.28)) // 16 tooth gear pitch diameter
+                 
+            )
+            .SmartCurrentLimit(40)
+        )
+        .MotorController(Names.Motors.IntakeMotorRotator, Manufacturer.REVRobotics, c->c
+            .Motor(Motor.NEO)
+            .IdleMode(IdleMode.kCoast)
+            .GearBox(g-> g
+                 .Gear("Stage1", 1, 5) 
+                 
             )
             .SmartCurrentLimit(40)
         )
