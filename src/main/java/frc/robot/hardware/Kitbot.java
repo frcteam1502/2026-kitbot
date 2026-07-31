@@ -73,15 +73,15 @@ public class Kitbot {
                     .MotorController("Intake Motor", Inventory.Names.Motors.IntakeMotor, c->c
                         
                         .PDH(7)
-                        .CanNumber(19)
-                       .Abbreviation("IM")
+                        .CanNumber(15)
+                        .Abbreviation("IM")
                     )
                     
                     .MotorController("Intake Motor Rotator", Inventory.Names.Motors.IntakeMotorRotator, c->c
-                        
+                        .PID(0.1,0.00005,0)
                         .PDH(14)
-                        .CanNumber(19)
-                       .Abbreviation("ARM")
+                        .CanNumber(16)
+                        .Abbreviation("ARM")
                     )
                     .MotorController("Turret Motor", Inventory.Names.Motors.Turret, c->c
                         .PID(0.13,0.00005,0)
