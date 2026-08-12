@@ -14,6 +14,7 @@ import frc.robot.commands.IntakeCommands;
 public class IntakeSubsystem extends SubsystemBase{
     final SparkMax m_intakeMotor;
     final SparkMax m_intakeRotatorMotor;
+    String intakepos = "up";
     public IntakeSubsystem(RobotConfiguration robotConfiguration){       
         m_intakeMotor = robotConfiguration.MotorController("Intake Motor").buildSparkMax();
         m_intakeRotatorMotor = robotConfiguration.MotorController("Intake Motor Rotator").buildSparkMax();
@@ -21,8 +22,16 @@ public class IntakeSubsystem extends SubsystemBase{
     public void setIntakePower(double speed){
         m_intakeMotor.set(speed);
     }
-    public void setIntakeLocation(double pos){
-        m_intakeRotatorMotor.getClosedLoopController().setSetpoint(pos, ControlType.kPosition);
+    public void setIntakeLocation(){
+        if (intakepos == "up"){
+            m_intakeRotatorMotor.getClosedLoopController().setSetpoint(0.1, ControlType.kPosition);
+            intakepos = "down";
+        }
+        else if(intakepos == "down") {
+            m_intakeRotatorMotor.getClosedLoopController().setSetpoint(0, ControlType.kPosition);
+            intakepos = ("up");
+        }
+        
 
     }
 
