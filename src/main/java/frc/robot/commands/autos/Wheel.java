@@ -1,7 +1,6 @@
 package frc.robot.commands.autos;
 
 import org.team1502.configuration.factory.RobotConfiguration;
-import org.team1502.injection.RobotFactory;
 
 import com.revrobotics.spark.SparkMax;
 
@@ -9,7 +8,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class Wheel extends Command {
-    Command m_command;
     SparkMax[] m_modules;
     SparkMax m_module;
     double m_speed;

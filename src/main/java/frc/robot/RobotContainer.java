@@ -13,13 +13,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.autos.Auto1;
 import frc.robot.commands.autos.Wheel;
 import frc.robot.hardware.Kitbot;
-
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.autos.Auto1;
-import frc.robot.commands.autos.Wheel;
-import frc.robot.hardware.Kitbot;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.vision.Vision;
 import static frc.robot.subsystems.vision.VisionConstants.camera0Name;
@@ -50,7 +43,7 @@ public class RobotContainer {
             case REAL:
                 // Real robot, instantiate hardware IO implementations
                 vision = new Vision(
-                    drive::addVisionMeasurement,
+                    drive::accept,
                     // new VisionIOLimelight(camera1Name, drive::getRotation), // UN-COMMENT-OUT when
                     // LimeLight is installed
                     new VisionIOPhotonVision(camera0Name, robotToCamera0));
@@ -58,14 +51,14 @@ public class RobotContainer {
             case SIM:
                 // Sim robot, instantiate physics sim IO implementations
                 vision = new Vision(
-                    drive::addVisionMeasurement,
+                    drive::accept,
                     new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
                     new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
                 break;    
             default:
                 // Replayed robot, disable IO implementations
                 // (Use same number of dummy implementations as the real robot)
-                vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
+                vision = new Vision(drive::accept, new VisionIO() {}, new VisionIO() {});
                 break;
         }
 

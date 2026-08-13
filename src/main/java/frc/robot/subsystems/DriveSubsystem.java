@@ -33,12 +33,13 @@ import edu.wpi.first.wpilibj2.command.MecanumControllerCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.DriveInstruction;
 import frc.robot.commands.DriverCommands;
+import frc.robot.subsystems.vision.Vision.VisionConsumer;
 import frc.robot.team1502.GyroIO;
 import frc.robot.team1502.GyroIOPigeon2;
 
 @SubsystemInfo(disabled = false)
 @DefaultCommand(command = DriverCommands.class)
-public class DriveSubsystem extends SubsystemBase {
+public class DriveSubsystem extends SubsystemBase implements VisionConsumer {
     
     public static class DriveConstants {
       public static final double odometryFrequency = 100.0; // Hz
@@ -57,7 +58,6 @@ public class DriveSubsystem extends SubsystemBase {
     final RobotConfiguration m_robotConfiguration;
 
     public static final Lock odometryLock = new ReentrantLock();
-    private final GyroIO gyroIO;
     //private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
     private final MecanumDrivePoseEstimator poseEstimator;
     //private final Module[] modules = new Module[4]; // FL, FR, BL, BR
@@ -82,14 +82,14 @@ public class DriveSubsystem extends SubsystemBase {
         
         zeroHeading(); // whichever way we are pointing is 0 (+X direction)
         
-        m_drive = robotConfiguration.MecanumDrive().buildDriver(m_gyroRotation2d);
+        m_drive = robotConfiguration.MecanumDrive().buildDriver();
 
     }
     int cycle = 0;
     DriveInstruction m_instruction;
     @Override
     public void periodic() {
-        m_drive.update(); // Update the mecanum driver in the periodic block
+        m_drive.update(m_gyroRotation2d.get()); // Update the mecanum driver in the periodic block
         SmartDashboard.putNumber("cycle", cycle++);
 
         if (m_instruction != null) {
@@ -114,7 +114,7 @@ public class DriveSubsystem extends SubsystemBase {
      * @param pose The pose to which to set the odometry.
      */
     public void resetOdometry(Pose2d pose) {
-        m_drive.resetOdometry(pose);
+        m_drive.resetOdometry(m_gyroRotation2d.get(), pose);
     }
 
     public void resetOdometry() {
@@ -130,12 +130,15 @@ public class DriveSubsystem extends SubsystemBase {
      *
      * @param xSpeed        Speed of the robot in the x direction (forward/backwards).
      * @param ySpeed        Speed of the robot in the y direction (sideways).
-     * @param rot
-     * @param fieldRelative           Angular rate of the robot (theta). Clockwise!
-     * Whether the provided x and y speeds are relative to the field.
+     * @param rot           Angular rate of the robot (theta). Clockwise!
+     * @param fieldRelative Whether the provided x and y speeds are relative to the field.
      */
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-        m_drive.drive(xSpeed, ySpeed, rot, drive_type);
+        if (fieldRelative) {
+            m_drive.drive(xSpeed, ySpeed, rot, m_gyroRotation2d.get());
+        } else {
+            m_drive.drive(xSpeed, ySpeed, rot);
+        }
     }
     
     public void drive(DriveInstruction instruction) {
@@ -203,7 +206,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
       /** Adds a new timestamped vision measurement. */
-    public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds, Matrix<N3, N1> visionMeasurementStdDevs) {
+    public void accept(Pose2d visionRobotPoseMeters, double timestampSeconds, Matrix<N3, N1> visionMeasurementStdDevs) {
         poseEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
     }
 

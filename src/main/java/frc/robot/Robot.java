@@ -13,9 +13,6 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.team1502.game.GameState;
 
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -49,24 +46,22 @@ public class Robot extends LoggedRobot {
 
         // Set up data receivers & replay source
     switch (Constants.currentMode) {
-      case REAL:
-        // Running on a real robot, log to a USB stick ("/U/logs")
-        Logger.addDataReceiver(new WPILOGWriter());
-        Logger.addDataReceiver(new NT4Publisher());
-        break;
+      case REAL -> {
+          // Running on a real robot, log to a USB stick ("/U/logs")
+          Logger.addDataReceiver(new WPILOGWriter());
+          Logger.addDataReceiver(new NT4Publisher());
+          }
 
-      case SIM:
-        // Running a physics simulator, log to NT
+      case SIM -> // Running a physics simulator, log to NT
         Logger.addDataReceiver(new NT4Publisher());
-        break;
 
-      case REPLAY:
-        // Replaying a log, set up replay source
-        setUseTiming(false); // Run as fast as possible
-        String logPath = LogFileUtil.findReplayLog();
-        Logger.setReplaySource(new WPILOGReader(logPath));
-        Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
-        break;
+      case REPLAY -> {
+          // Replaying a log, set up replay source
+          setUseTiming(false); // Run as fast as possible
+          String logPath = LogFileUtil.findReplayLog();
+          Logger.setReplaySource(new WPILOGReader(logPath));
+          Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
+          }
     }
 
     // Start AdvantageKit logger
@@ -109,7 +104,7 @@ public class Robot extends LoggedRobot {
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
+      CommandScheduler.getInstance().schedule(m_autonomousCommand);
     }
   }
 

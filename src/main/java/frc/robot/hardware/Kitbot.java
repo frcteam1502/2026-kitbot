@@ -22,7 +22,6 @@ public class Kitbot {
     public static RobotConfiguration testRobot() {
         return RobotConfiguration.Test("1502_KitBot", cfg -> build(cfg));
     }
-    @SuppressWarnings("unchecked")
     public static RobotConfiguration buildRobot() {
         return RobotConfiguration.Create("1502_KitBot", cfg -> build(cfg));
     }
@@ -69,8 +68,7 @@ public class Kitbot {
                         .PDH(0)
                         .CanNumber(16)
                         .Abbreviation("RR"))
-                    .MotorController("Feeder Motor", Inventory.Names.Motors.FeederMotor, c->c
-                        
+                    .MotorController("Feeder Motor", Inventory.Names.Motors.FeederMotor, c->c                        
                         .PDH(4)
                         .CanNumber(2)
                         .Abbreviation("FM"))
@@ -109,9 +107,12 @@ public class Kitbot {
                     .kA(0.15)
                 )
             )
+            .Subsystem("Vision.class", sys->sys
+                .Vision(v->v
+                    //.PhotonVision("MyCamera")
+                )
+) ///.PhotonVision("camera1") ) )
         );
-            
-            
     }
 
 }

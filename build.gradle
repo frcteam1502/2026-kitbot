@@ -7,7 +7,11 @@ java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
 }
-
+repositories {
+   maven {
+       url 'file://D:/source/FRC/frcteam1502/tdlib/build/libs/tdLib.jar'
+   }
+}
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
@@ -77,6 +81,7 @@ dependencies {
     def akitJson = new groovy.json.JsonSlurper().parseText(new File(projectDir.getAbsolutePath() + "/vendordeps/AdvantageKit.json").text)
     annotationProcessor "org.littletonrobotics.akit:akit-autolog:$akitJson.version"
 
+    implementation files('file://D:/source/FRC/frcteam1502/tdlib/build/libs/tdLib.jar')
 }
 
 test {

@@ -4,9 +4,7 @@ import java.util.Arrays;
 import java.util.function.Consumer;
 
 import org.team1502.configuration.CAN.Manufacturer;
-import org.team1502.configuration.builders.motors.GearBox;
 import org.team1502.configuration.builders.motors.Motor;
-import org.team1502.configuration.builders.motors.MotorControllerBuilder;
 import org.team1502.configuration.factory.PartFactory;
 import org.team1502.configuration.factory.RobotConfiguration;
 
@@ -14,6 +12,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.RPM;
 
 public class Inventory {
     public static class Names {
@@ -36,21 +35,22 @@ public class Inventory {
     }
 
     public static void Motors(PartFactory inventory) {inventory
-        .Motor(Motor.NEO, m -> m
+        .Motor(Motor.Types.NEO, m -> m
             .MotorType(MotorType.kBrushless)
-            .FreeSpeedRPM(5_820.0) // from MK4i docs, see data sheet for empirical values
+            .FreeSpeed(RPM.of(5_820.0)) // from MK4i docs, see data sheet for empirical values
         )
-        .Motor(Motor.VORTEX, m -> m
+        .Motor(Motor.Types.VORTEX, m -> m
             .MotorType(MotorType.kBrushless)
-            .FreeSpeedRPM(6_784.0) // from REV
+            .FreeSpeed(RPM.of(6_784.0)) // from REV
         )
-        .Motor(Motor.NEO550, m -> m
+        .Motor(Motor.Types.NEO550, m -> m
             .MotorType(MotorType.kBrushless)
-            .FreeSpeedRPM(11_000.0) // from REV
+            .FreeSpeed(RPM.of(11_000.0)) // from REV
         );
     }
 
-    /** Will set position conversion factor to radians */
+    /** Will set position conversion factor to radians 
+     * 
     public static GearBox Chain(GearBox gearbox, String chainNumber, int drivingTeeth, int drivenTeeth) {
         double reduction = getChainReduction(chainNumber, drivingTeeth, drivenTeeth);
         double actuatorHack = 2 / reduction; // will end up in Radians when PI is factored in
@@ -71,39 +71,41 @@ public class Inventory {
         return chainPitch/Math.sin(Math.PI / teeth);
 
     }
+    */
+
     public static void Kitbot(PartFactory inventory) { inventory
         .MotorController(Names.Motors.Mecanum, Manufacturer.REVRobotics, c->c
-            .Motor(Motor.NEO)
+            .Motor(Motor.Types.NEO)
             .IdleMode(IdleMode.kBrake)
             // TODO: velocity PID controllers for autonomous
             .GearBox(g-> g
-                 .Gear("Stage1", 14, 50)
-                 .Gear("Stage2", 14, 50) // 12.75:1, 44.11 ft-lbs, 445.18 rpm, 15.54 ft/s
-                 .Wheel(Inches.of(8.0))
+                .Gear("Stage1", 14, 50)
+                .Gear("Stage2", 14, 50) // 12.75:1, 44.11 ft-lbs, 445.18 rpm, 15.54 ft/s
             )
             .SmartCurrentLimit(40)
+            .Wheel(Inches.of(8.0))
         )
         .MotorController(Names.Motors.Elevator, Manufacturer.REVRobotics, c->c
-            .Motor(Motor.VORTEX)
+            .Motor(Motor.Types.VORTEX)
             .IdleMode(IdleMode.kBrake)
             .GearBox(g-> g
-                 .Gear("Stage1", 1, 5) 
-                 .Gear("Stage2", 1, 5) 
-                 .Wheel(Inches.of(1.28)) // 16 tooth gear pitch diameter
+                .Gear("Stage1", 1, 5) 
+                .Gear("Stage2", 1, 5) 
             )
             .SmartCurrentLimit(40)
+            .Wheel(Inches.of(1.28)) // 16 tooth gear pitch diameter
         )
         .MotorController(Names.Motors.ShooterMotor, Manufacturer.REVRobotics, c->c
             .GearBox(g -> g
                 .Gear("Stage1", 1, 1)
             )
-            .Motor(Motor.VORTEX)
+            .Motor(Motor.Types.VORTEX)
             .IdleMode(IdleMode.kCoast)
             .SmartCurrentLimit(40)
             
         )
         .MotorController(Names.Motors.Turret, Manufacturer.REVRobotics, c->c
-            .Motor(Motor.NEO)
+            .Motor(Motor.Types.NEO)
             .IdleMode(IdleMode.kBrake)
             .GearBox(g-> g
                  .Gear("Stage1", 1, 4)
@@ -113,7 +115,7 @@ public class Inventory {
         )
         .MotorController(Names.Motors.FeederMotor, Manufacturer.REVRobotics, c->c
             .Reversed(true)
-            .Motor(Motor.NEO)
+            .Motor(Motor.Types.NEO)
             .IdleMode(IdleMode.kCoast)
             .GearBox(g-> g
                  .Gear("Stage1", 1, 4)
@@ -121,38 +123,4 @@ public class Inventory {
             .SmartCurrentLimit(40)
         );
     }
-
-    public static PartFactory Mk4iL3(PartFactory inventory) { return inventory
-        .SwerveModule(sm -> sm
-            .CANCoder(cc -> cc)
-            .TurningMotor(Manufacturer.REVRobotics, mc -> mc
-                .Motor(Motor.NEO550)
-                .IdleMode(IdleMode.kCoast)
-                .Reversed() // swerve rotation is CCW
-                .GearBox(g-> g
-                    .Gear("Stage1", 14, 50)
-                    .Gear("Stage2", 10, 60)
-                )
-                .AngleController(-180, 180)
-                .PIDController(p->p
-                    .Gain(3.4, 0.0, 0.0)
-                    .EnableContinuousInput(-Math.PI, Math.PI)
-                )
-            )
-            .DrivingMotor(Manufacturer.REVRobotics, mc -> mc
-                .Motor(Motor.VORTEX)
-                .IdleMode(IdleMode.kBrake)
-                .GearBox(g-> g
-                    .Gear("Stage1", 14, 50)
-                    .Gear("Stage2", 28, 16)
-                    .Gear("Stage3", 15, 45)
-                    .Wheel(Inches.of(4.0))
-                )
-                .PID(.0005, 0.0, 0.0, 1.0)
-                .ClosedLoopRampRate(.5)
-                .SmartCurrentLimit(30)
-            )
-        );
-    }
-
 }
