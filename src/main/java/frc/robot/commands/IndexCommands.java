@@ -20,13 +20,13 @@ public class IndexCommands extends Command {
     
     public void initialize(){
         Operator.LeftBumper
-            .onTrue(new InstantCommand(() -> m_subsystem.setFeederPower(-0.4)))
-            .onTrue(new InstantCommand(() -> m_subsystem.setIndexPower(1)))
+            .onTrue(new InstantCommand(() -> m_subsystem.setFeederPower(0.6)))
+            .onTrue(new InstantCommand(() -> m_subsystem.setIndexPower(-1)))
             .onFalse(new InstantCommand(() -> m_subsystem.setFeederPower(0)))
             .onFalse(new InstantCommand(() -> m_subsystem.setIndexPower(0)));
         Operator.RightBumper
-            .onTrue(new InstantCommand(() -> m_subsystem.setFeederPower(0.6)))
-            .onTrue(new InstantCommand(() -> m_subsystem.setIndexPower(-1)))
+            .onTrue(new InstantCommand(() -> m_subsystem.setFeederPower(-0.6)))
+            .onTrue(new InstantCommand(() -> m_subsystem.setIndexPower(1)))
             .onFalse(new InstantCommand(() -> m_subsystem.setIndexPower(0)))
             .onFalse(new InstantCommand(() -> m_subsystem.setFeederPower(0)));
         }

@@ -14,7 +14,7 @@ import frc.robot.commands.IntakeCommands;
 public class IntakeSubsystem extends SubsystemBase{
     final SparkMax m_intakeMotor;
     final SparkMax m_intakeRotatorMotor;
-    String intakepos = "up";
+    String intakepos = "down";
     public IntakeSubsystem(RobotConfiguration robotConfiguration){       
         m_intakeMotor = robotConfiguration.MotorController("Intake Motor").buildSparkMax();
         m_intakeRotatorMotor = robotConfiguration.MotorController("Intake Motor Rotator").buildSparkMax();

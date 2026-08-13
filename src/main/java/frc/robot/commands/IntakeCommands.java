@@ -18,7 +18,7 @@ public class IntakeCommands extends Command {
     
     public void initialize(){
             Operator.leftTrigger(0.5)
-            .onTrue(new InstantCommand(() -> m_subsystem.setIntakePower(0.4)))
+            .onTrue(new InstantCommand(() -> m_subsystem.setIntakePower(1)))
             .onFalse(new InstantCommand(() -> m_subsystem.setIntakePower(0)));
             Operator.rightTrigger(0.5)
             .onTrue(new InstantCommand(() -> m_subsystem.setIntakePower(-0.4)))
