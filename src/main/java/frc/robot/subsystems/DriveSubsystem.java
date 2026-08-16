@@ -8,6 +8,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
 
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.team1502.configuration.annotations.DefaultCommand;
 import org.team1502.configuration.annotations.SubsystemInfo;
 import org.team1502.configuration.factory.RobotConfiguration;
@@ -19,6 +20,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.estimator.MecanumDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -28,6 +30,7 @@ import static edu.wpi.first.units.Units.DegreesPerSecond;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.MecanumControllerCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -41,39 +44,16 @@ import frc.robot.team1502.GyroIOPigeon2;
 @DefaultCommand(command = DriverCommands.class)
 public class DriveSubsystem extends SubsystemBase implements VisionConsumer {
     
-    public static class DriveConstants {
-      public static final double odometryFrequency = 100.0; // Hz
-    
-    }
-    
-
-
-    final Pigeon2 m_gyro;
-    /** generic Angle in degrees CW */
-    public /* final */ Supplier<Angle> m_gyroYaw;
-    /** generic Rotation2d in radians */
-    public /* final */ Supplier<Rotation2d> m_gyroRotation2d;
     public boolean drive_type = false; 
     final MecanumDriver m_drive;
     final RobotConfiguration m_robotConfiguration;
 
-    public static final Lock odometryLock = new ReentrantLock();
-    //private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
-    private final MecanumDrivePoseEstimator poseEstimator;
-    //private final Module[] modules = new Module[4]; // FL, FR, BL, BR
-    //private final SysIdRoutine sysId;
     private final Alert gyroDisconnectedAlert = new Alert("Disconnected gyro, using kinematics as fallback.", AlertType.kError);
 
     /** Creates a new DriveSubsystem. */
     public DriveSubsystem(RobotConfiguration robotConfiguration) {
         m_robotConfiguration = robotConfiguration;
         
-        // set up gyro and angle suppliers
-        m_gyro = robotConfiguration.Pigeon2().buildPigeon2();
-        gyroIO = new GyroIOPigeon2(m_gyro);
-        m_gyroYaw = m_gyro.getYaw().asSupplier();
-        m_gyroRotation2d = ()->new Rotation2d(m_gyroYaw.get().times(-1.0));
-
         MecanumDriveWheelPositions wheelPositions = new MecanumDriveWheelPositions();
         var kinematics = robotConfiguration.MecanumDrive().Chassis().getMecanumDriveKinematics();
         // TODO: update MecanumDrive to incorporate this poseEstimator
@@ -89,8 +69,15 @@ public class DriveSubsystem extends SubsystemBase implements VisionConsumer {
     DriveInstruction m_instruction;
     @Override
     public void periodic() {
-        m_drive.update(m_gyroRotation2d.get()); // Update the mecanum driver in the periodic block
+        
         SmartDashboard.putNumber("cycle", cycle++);
+    
+        // Stop moving when disabled
+        if (DriverStation.isDisabled()) {
+            m_drive.stop();
+        }
+        m_drive.periodic();
+    
 
         if (m_instruction != null) {
             SmartDashboard.putNumber("x-speed", m_instruction.x_speed());
@@ -114,7 +101,7 @@ public class DriveSubsystem extends SubsystemBase implements VisionConsumer {
      * @param pose The pose to which to set the odometry.
      */
     public void resetOdometry(Pose2d pose) {
-        m_drive.resetOdometry(m_gyroRotation2d.get(), pose);
+        m_drive.resetOdometry(pose);
     }
 
     public void resetOdometry() {
@@ -135,9 +122,9 @@ public class DriveSubsystem extends SubsystemBase implements VisionConsumer {
      */
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
         if (fieldRelative) {
-            m_drive.drive(xSpeed, ySpeed, rot, m_gyroRotation2d.get());
-        } else {
             m_drive.drive(xSpeed, ySpeed, rot);
+        } else {
+            m_drive.driveRelative(xSpeed, ySpeed, rot);
         }
     }
     
@@ -208,6 +195,12 @@ public class DriveSubsystem extends SubsystemBase implements VisionConsumer {
       /** Adds a new timestamped vision measurement. */
     public void accept(Pose2d visionRobotPoseMeters, double timestampSeconds, Matrix<N3, N1> visionMeasurementStdDevs) {
         poseEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
+    }
+
+      /** Returns the measured chassis speeds of the robot. */
+    @AutoLogOutput(key = "ChassisSpeeds/Measured")
+    private ChassisSpeeds getChassisSpeeds() {
+        return kinematics.toChassisSpeeds(getModuleStates());
     }
 
 }
