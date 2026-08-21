@@ -10,10 +10,13 @@ import org.team1502.injection.RobotFactory;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.autos.Auto1;
 import frc.robot.commands.autos.Wheel;
 import frc.robot.hardware.Kitbot;
-
+import frc.robot.subsystems.IndexSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -34,7 +37,7 @@ public class RobotContainer {
         robotConfiguration = Kitbot.buildRobot();
         robotFactory = RobotFactory.Create(Robot.class, robotConfiguration);
       
-      m_chooser.setDefaultOption("Default", "Auto Right");
+      m_chooser.setDefaultOption("Default", "shoot");
       m_chooser.addOption("Right Side", "Auto Right");
       m_chooser.addOption("Left Side", "Auto Left");
       m_chooser.addOption("Front Left", "0");
@@ -65,9 +68,21 @@ public class RobotContainer {
             case "Auto Left":
                 autonomousCommand = new Auto1(robotFactory, -1); break;
             case "Auto Right":
-            case "Default":
-            default: 
-                autonomousCommand = new Auto1(robotFactory, 1); break;
+            case "shoot":
+            var shooterSubsystem = robotFactory.getInstance(ShooterSubsystem.class);
+            var indexSubsystem = robotFactory.getInstance(IndexSubsystem.class);
+            var intakeSubsystem = robotFactory.getInstance(IntakeSubsystem.class);
+              autonomousCommand = Commands.sequence(
+                shooterSubsystem.runShooterCommand(185).withTimeout(5),
+                indexSubsystem.runIndexCommand().withTimeout(7),
+                indexSubsystem.flippedIndexCommand().withTimeout(1),
+                indexSubsystem.runIndexCommand().withTimeout(5),
+                intakeSubsystem.runArmCommand()
+              ); 
+              break;
+             case "Default":
+             default: 
+                 autonomousCommand = new Auto1(robotFactory, 1); break;
         }
         return autonomousCommand;
         //return new ForwardAuto(m_robotDrive); 

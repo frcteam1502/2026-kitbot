@@ -7,6 +7,7 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.ShooterCommands;
 
@@ -16,11 +17,11 @@ import frc.robot.commands.ShooterCommands;
 public class ShooterSubsystem extends SubsystemBase{
     
     final SparkMax m_shooterRight;
-    final SparkMax m_turret;
+    //final SparkMax m_turret;
 
     public ShooterSubsystem(RobotConfiguration robotConfiguration){       
         m_shooterRight = robotConfiguration.MotorController("Shooter Motor Right").buildSparkMax();
-        m_turret = robotConfiguration.MotorController("Turret Motor").buildSparkMax();
+        //m_turret = robotConfiguration.MotorController("Turret Motor").buildSparkMax();
     }
 
    
@@ -29,7 +30,7 @@ public class ShooterSubsystem extends SubsystemBase{
         SmartDashboard.putNumber("Encoder Velocity", m_shooterRight.getEncoder().getVelocity());
         SmartDashboard.putNumber("Encoder current", m_shooterRight.getOutputCurrent());
         SmartDashboard.putNumber("Motor voltage", m_shooterRight.getBusVoltage() * m_shooterRight.getAppliedOutput());
-        SmartDashboard.putNumber("Turret Angle", m_turret.getEncoder().getPosition());
+       // SmartDashboard.putNumber("Turret Angle", m_turret.getEncoder().getPosition());
     }
 
     public void setShooterSpeed(double speed){
@@ -39,9 +40,14 @@ public class ShooterSubsystem extends SubsystemBase{
     public void setShooterVelocity(double velocity){        
         m_shooterRight.getClosedLoopController().setSetpoint(velocity, ControlType.kVelocity);        
     }
-    public void setTurretAngle(double pos){
+    /*public void setTurretAngle(double pos){
         m_turret.getClosedLoopController().setSetpoint(pos*3, ControlType.kPosition);
         // dividing by 3 is the same as 1 full rotation
+    }*/
+    public Command runShooterCommand(double velocity){
+        return this.startEnd(
+            () -> this.setShooterVelocity(velocity),
+            () -> this.setShooterVelocity(velocity));
     }
 
 

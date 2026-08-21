@@ -5,6 +5,7 @@ import org.team1502.configuration.factory.RobotConfiguration;
 
 import com.revrobotics.spark.SparkMax;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.IndexCommands;
 @SubsystemInfo(disabled = false)
@@ -24,6 +25,19 @@ public class IndexSubsystem extends SubsystemBase {
     }
     public void setIndexPower(double power){
         m_indexMotor.set(power);
+    }
+    public Command runIndexCommand(){
+        return this.startEnd(
+            () -> {this.setFeederPower(1);
+                   this.setIndexPower(-1);},
+            () -> {this.setFeederPower(0);
+                   this.setIndexPower(0);});
+    }
+    public Command flippedIndexCommand(){
+        return this.startEnd(
+            () -> this.setIndexPower(-1),
+            () -> this.setIndexPower(0)
+            );
     }
     
 }

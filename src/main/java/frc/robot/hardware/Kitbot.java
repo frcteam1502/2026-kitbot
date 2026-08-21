@@ -78,7 +78,7 @@ public class Kitbot {
                     )
                     
                     .MotorController("Intake Motor Rotator", Inventory.Names.Motors.IntakeMotorRotator, c->c
-                        .PID(0.21,0.00005,0)
+                        .PID(1.2,0.00005,0, 2)
                         .PDH(14)
                         .CanNumber(16)
                         .Abbreviation("ARM")

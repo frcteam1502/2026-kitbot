@@ -107,7 +107,7 @@ public class Inventory {
             .Motor(Motor.NEO)
             .IdleMode(IdleMode.kCoast)
             .GearBox(g-> g
-                 .Gear("Stage1", 1, 5) 
+                .Gear("Stage1", 1, 5) 
                  
             )
             .SmartCurrentLimit(40)
