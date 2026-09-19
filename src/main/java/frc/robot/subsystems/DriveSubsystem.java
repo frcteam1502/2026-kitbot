@@ -37,8 +37,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.DriveInstruction;
 import frc.robot.commands.DriverCommands;
 import frc.robot.subsystems.vision.Vision.VisionConsumer;
-import frc.robot.team1502.GyroIO;
-import frc.robot.team1502.GyroIOPigeon2;
 
 @SubsystemInfo(disabled = false)
 @DefaultCommand(command = DriverCommands.class)
@@ -48,17 +46,9 @@ public class DriveSubsystem extends SubsystemBase implements VisionConsumer {
     final MecanumDriver m_drive;
     final RobotConfiguration m_robotConfiguration;
 
-    private final Alert gyroDisconnectedAlert = new Alert("Disconnected gyro, using kinematics as fallback.", AlertType.kError);
-
     /** Creates a new DriveSubsystem. */
     public DriveSubsystem(RobotConfiguration robotConfiguration) {
         m_robotConfiguration = robotConfiguration;
-        
-        MecanumDriveWheelPositions wheelPositions = new MecanumDriveWheelPositions();
-        var kinematics = robotConfiguration.MecanumDrive().Chassis().getMecanumDriveKinematics();
-        // TODO: update MecanumDrive to incorporate this poseEstimator
-        poseEstimator = new MecanumDrivePoseEstimator(kinematics,  Rotation2d.kZero, wheelPositions, Pose2d.kZero);
-
         
         zeroHeading(); // whichever way we are pointing is 0 (+X direction)
         
@@ -166,7 +156,7 @@ public class DriveSubsystem extends SubsystemBase implements VisionConsumer {
 
     /** Zeroes the heading of the robot. */
     public void zeroHeading() {
-        m_gyro.reset();
+        m_drive.resetGyro(Rotation2d.kZero);
     }
 
     /**
@@ -175,17 +165,17 @@ public class DriveSubsystem extends SubsystemBase implements VisionConsumer {
      * @return the robot's heading in degrees, from -180 to 180
      */
     public double getHeading() {
-        return m_gyro.getRotation2d().getDegrees();
+        return m_drive.getGyroRotation().getDegrees();
     }
 
     /**
      * Returns the turn rate of the robot.
      *
      * @return The turn rate of the robot, in degrees per second
-     */
-    public double getTurnRate() {
+     public double getTurnRate() {
         return m_gyro.getAngularVelocityZWorld().getValue().in(DegreesPerSecond);
     }
+    */
 
     public void stop() {
         m_instruction = new DriveInstruction(0,0,0, false, 0);
@@ -194,13 +184,15 @@ public class DriveSubsystem extends SubsystemBase implements VisionConsumer {
 
       /** Adds a new timestamped vision measurement. */
     public void accept(Pose2d visionRobotPoseMeters, double timestampSeconds, Matrix<N3, N1> visionMeasurementStdDevs) {
-        poseEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
+        m_drive.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
     }
 
-      /** Returns the measured chassis speeds of the robot. */
-    @AutoLogOutput(key = "ChassisSpeeds/Measured")
-    private ChassisSpeeds getChassisSpeeds() {
-        return kinematics.toChassisSpeeds(getModuleStates());
-    }
+      /** Returns the measured chassis speeds of the robot. 
+       *
+      @AutoLogOutput(key = "ChassisSpeeds/Measured")
+      private ChassisSpeeds getChassisSpeeds() {
+          return kinematics.toChassisSpeeds(getModuleStates());
+        }
+        */
 
 }

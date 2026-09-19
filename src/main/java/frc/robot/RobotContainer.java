@@ -6,6 +6,9 @@ package frc.robot;
 
 import org.team1502.configuration.factory.RobotConfiguration;
 import org.team1502.injection.RobotFactory;
+import org.team1502.IO.VisionIO;
+import org.team1502.IO.VisionIOPhotonVision;
+import org.team1502.IO.VisionIOPhotonVisionSim;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -14,14 +17,6 @@ import frc.robot.commands.autos.Auto1;
 import frc.robot.commands.autos.Wheel;
 import frc.robot.hardware.Kitbot;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.vision.Vision;
-import static frc.robot.subsystems.vision.VisionConstants.camera0Name;
-import static frc.robot.subsystems.vision.VisionConstants.camera1Name;
-import static frc.robot.subsystems.vision.VisionConstants.robotToCamera0;
-import static frc.robot.subsystems.vision.VisionConstants.robotToCamera1;
-import frc.robot.subsystems.vision.VisionIO;
-import frc.robot.subsystems.vision.VisionIOPhotonVision;
-import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 
 
 public class RobotContainer {
@@ -112,7 +107,7 @@ public class RobotContainer {
             case "Auto Right":
             case "Default":
             default: 
-                autonomousCommand = new Auto1(robotFactory, 1); break;
+                autonomousCommand = new Auto1(robotFactory, 1);
         }
         return autonomousCommand;
         //return new ForwardAuto(m_robotDrive); 

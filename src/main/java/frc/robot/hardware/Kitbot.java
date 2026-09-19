@@ -4,12 +4,12 @@ import org.team1502.configuration.factory.RobotConfiguration;
 import org.team1502.drivers.MecanumDriver;
 import org.team1502.injection.RobotFactory;
 
-import static edu.wpi.first.units.Units.Inches;
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
-import static edu.wpi.first.units.Units.Volts;
+import edu.wpi.first.apriltag.AprilTagFields;
+
+import static edu.wpi.first.units.Units.*;
 import frc.robot.Robot;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.team1502.SimpleMotorFeedforwardBuilder;
 
 public class Kitbot {
@@ -107,11 +107,36 @@ public class Kitbot {
                     .kA(0.15)
                 )
             )
-            .Subsystem("Vision.class", sys->sys
-                .Vision(v->v
-                    //.PhotonVision("MyCamera")
+                .Subsystem(VisionSubsystem.class, s->s
+                    .Vision(v->v
+                        .MaxAmbiguity(.25)
+                        .MaxZError(Centimeters.of(97.5))
+                        .LinearStdDevBaseline(0.2)
+                        .AngularStdDevBaseline(6)
+                        .LinearStdDevMegatag2Factor(0.5) // More stable than full 3D solve
+                        .AngularStdDevMegatag2Factor(Double.POSITIVE_INFINITY) // No rotation data available
+                        .AprilTagLayout(AprilTagFields.kDefaultField)
+
+                        .PhotonVision("Camera 1", p->p
+                            .X(Inches.of(1.0))
+                            .Y(Inches.of(1.0))
+                            .Z(Inches.of(1.0))  
+                            .Roll(Degrees.of(0.0))
+                            .Pitch(Degrees.of(0.0))
+                            .Yaw(Degrees.of(0.0))
+                            .StdDevFactor(1.0)
+                        )
+                        .PhotonVision("Camera 2", p->p
+                            .X(Inches.of(1.0))
+                            .Y(Inches.of(-1.0))
+                            .Z(Inches.of(1.0))  
+                            .Roll(Degrees.of(0.0))
+                            .Pitch(Degrees.of(0.0))
+                            .Yaw(Degrees.of(0.0))
+                            .StdDevFactor(1.0)
+                        )
+                    )
                 )
-) ///.PhotonVision("camera1") ) )
         );
     }
 
